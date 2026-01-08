@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Event Page | Tickets</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Alpine -->
+  <script defer src="https://unpkg.com/alpinejs@3.14.1/dist/cdn.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            glass: 'rgba(255,255,255,0.15)',
+          }
+        }
+      }
+    }
+  </script>
+</style>
+</head>
+
+<body class="bg-white text-slate-950" x-data="ticketApp()">
+
+  <!-- Animated Background Blobs -->
+  <div class="fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute top-20 left-10 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-blob"></div>
+    <div class="absolute top-40 right-10 w-96 h-96 bg-cyan-400/30 rounded-full blur-3xl animate-blob delay-200"></div>
+    <div class="absolute bottom-20 left-1/2 w-96 h-96 bg-pink-500/30 rounded-full blur-3xl animate-blob delay-500"></div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="top-0 z-50">
+    <nav class="mx-auto max-w-7xl px-6 py-4 backdrop-blur-lg bg-glass border border-slate/10 rounded-b-xl flex items-center justify-between">
+      <h1 class="text-xl font-bold tracking-wide">Pulse<span class="text-cyan-400">Pass</span></h1>
+      <div class="hidden md:flex gap-8 text-sm text-slate/80">
+        <a href="#features" class="hover:text-slate transition">Features</a>
+        <a href="#events" class="hover:text-slate transition">Events</a>
+        <a href="#pricing" class="hover:text-slate transition">Pricing</a>
+      </div>
+      <button class="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-medium transition">
+        Get Started
+      </button>
+    </nav>
+  </header>
+
+    <!-- ================= EVENT PAGE ================= -->
+    <section x-show="view === 'event'" x-transition>
+
+    <!-- Hero -->
+    <div class="relative h-[70vh]">
+        <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4"
+            class="w-full h-full object-cover"/>
+
+        <div class="absolute inset-0 bg-black/60"></div>
+
+        <!-- Overlay -->
+        <div class="absolute inset-0 flex items-end">
+        <div class="max-w-7xl mx-auto w-full p-6 md:p-12 flex justify-between items-center">
+            <div class="">
+            <span class="inline-block bg-cyan-500 text-black px-4 py-1 rounded-full text-sm mb-4">
+            LIVE EVENT
+            </span>
+            <h1 class="text-4xl text-white md:text-6xl font-extrabold mb-4">
+            Neon Nights Festival 2026
+            </h1>
+            <p class="text-white mb-6">
+            Aug 24, 2026 · 6:00 PM · Eko Convention Center, Lagos
+            </p>
+            </div>
+            <div class="">
+            <button
+            @click="view='tickets'"
+            class="px-8 py-4 bg-cyan-500 text-white rounded-xl font-bold hover:bg-cyan-400 transition">
+            Grab Your Ticket
+            </button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Details -->
+    <div class="max-w-7xl mx-auto p-6 md:p-12 grid md:grid-cols-3 gap-12">
+        <div class="md:col-span-2 space-y-6">
+        <h2 class="text-3xl font-bold">About This Event</h2>
+        <p class="text-black/70">
+            Neon Nights Festival brings together music, art and nightlife in one
+            immersive experience. Expect top DJs, live performances and
+            unforgettable visuals.
+        </p>
+
+        <div class="grid sm:grid-cols-2 gap-6">
+            <div>
+            <h3 class="font-semibold">Date & Time</h3>
+            <p class="text-black/70">August 24, 2026 · 6:00 PM</p>
+            </div>
+            <div>
+            <h3 class="font-semibold">Location</h3>
+            <p class="text-black/70">Eko Convention Center, Lagos</p>
+            </div>
+            <div>
+            <h3 class="font-semibold">Organized By</h3>
+            <p class="text-black/70">PulsePass Events</p>
+            </div>
+        </div>
+        </div>
+
+        <!-- Big CTA -->
+        <div class="flex items-center">
+        <button
+            @click="view='tickets'"
+            class="w-full py-6 text-xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 rounded-2xl text-black hover:scale-105 transition">
+            Grab Your Ticket
+        </button>
+        </div>
+    </div>
+    </section>
+
+    <!-- ================= TICKET SPA ================= -->
+    <section x-show="view === 'tickets'" x-transition class="min-h-screen">
+
+    <!-- Step Indicator -->
+    <div class="max-w-7xl mx-auto px-6 pt-10">
+        <div class="flex gap-4 text-sm">
+        <template x-for="(s,i) in steps">
+            <div class="flex-1">
+            <div class="h-1 rounded-full"
+                :class="step>=i ? 'bg-cyan-400' : 'bg-slate/20'"></div>
+            <p class="mt-2 text-center" x-text="s"></p>
+            </div>
+        </template>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto p-6 md:p-12 grid md:grid-cols-3 gap-10">
+
+        <!-- LEFT CONTENT -->
+        <div class="md:col-span-2">
+
+        <!-- ========== STEP 1: TICKETS ========== -->
+        <div x-show="step===0" x-transition>
+            <h2 class="text-3xl font-bold mb-6">Choose Your Tickets</h2>
+
+            <template x-for="ticket in ticketTypes">
+            <div class="mb-4 p-6 rounded-2xl bg-glass backdrop-blur-lg border border-black/10 flex justify-between items-center">
+                <div>
+                <h3 class="text-xl font-semibold" x-text="ticket.name"></h3>
+                <p class="text-black/60">₦<span x-text="ticket.price"></span></p>
+                </div>
+                <div class="flex items-center gap-4">
+                <button @click="decrease(ticket)" class="px-3 py-1 bg-black/10 rounded">−</button>
+                <span x-text="ticket.qty"></span>
+                <button @click="increase(ticket)" class="px-3 py-1 bg-black/10 rounded">+</button>
+                </div>
+            </div>
+            </template>
+
+            <button
+            @click="step=1" :disabled="ticketTypes.every(t => t.qty === 0)"
+            class="mt-6 px-6 py-3 bg-cyan-500 text-black rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed">
+            Next
+            </button>
+        </div>
+
+        <!-- ========== STEP 2: CONTACT INFO ========== -->
+        <div x-show="step===1" x-transition>
+            <h2 class="text-3xl font-bold mb-6">Contact Information</h2>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+            <input placeholder="First Name" x-model="cinf[0]" class="bg-black/10 backdrop-blur-xs border border-black/20 rounded-lg p-3 text-black placeholder-black/50 shadow-lg"/>
+            <input placeholder="Last Name" x-model="cinf[1]" class="bg-black/10 backdrop-blur-xs border border-black/20 rounded-lg p-3 text-black placeholder-black/50 shadow-lg"/>
+            <input placeholder="Email Address" x-model="cinf[2]" class="bg-black/10 backdrop-blur-xs border border-black/20 rounded-lg p-3 text-black placeholder-black/50 shadow-lg"/>
+            <input placeholder="Confirm Email Address" x-model="cinf[3]" class="bg-black/10 backdrop-blur-xs border border-black/20 rounded-lg p-3 text-black placeholder-black/50 shadow-lg"/>
+            <select x-model="cinf[4]" class="bg-black/10 backdrop-blur-xs border border-black/20 rounded-lg p-3 text-black placeholder-black/50 shadow-lg">
+                <option>Gender</option>
+                <option value="Male">Male</option>
+                <option>Female</option>
+            </select>
+            <input placeholder="Phone Number" x-model="cinf[5]" class="bg-black/10 backdrop-blur-xs border border-black/20 rounded-lg p-3 text-black placeholder-black/50 shadow-lg"/>
+            </div>
+
+            <button
+            @click="step=0"
+            class="mt-6 px-6 py-3 bg-cyan-500 text-black rounded-xl font-bold">
+            Previous
+            </button>
+            <button
+            @click="step=2" :disabled="cinf.some(v => v.trim() === '')"
+            class="mt-6 px-6 py-3 bg-cyan-500 text-black rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed">
+            Proceed to Checkout
+            </button>
+        </div>
+
+        <!-- ========== STEP 3: CHECKOUT ========== -->
+        <div x-show="step===2" x-transition>
+            <h2 class="text-3xl font-bold mb-6">Checkout</h2>
+
+            <div class="flex gap-4 mb-6">
+            <input x-model="discountCode" placeholder="Discount Code" class="bg-white/10 backdrop-blur-xs border border-white/20 rounded-lg p-3 text-slate placeholder-slate/50 shadow-lg flex-1"/>
+            <button :disabled="!discountCode" class="px-4 bg-white/10 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                Apply Code</button>
+            </div>
+
+            <div class="flex gap-4 mb-6">
+            <button
+            @click="step=1"
+            class="mt-6 px-6 py-3 bg-cyan-500 text-black rounded-xl font-bold">
+            Previous
+            </button>
+            <button @click="proceedToPayment()"
+            class="w-full px-6 py-5 text-xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-500 rounded-2xl text-black">
+            Proceed to Payment
+            </button>
+            </div>
+        </div>
+        </div>
+
+        <!-- ORDER SUMMARY -->
+        <div class="bg-glass backdrop-blur-lg border border-black/10 rounded-2xl p-6 h-fit">
+        <h3 class="text-xl font-semibold mb-4">Order Summary</h3>
+
+        <template x-for="t in ticketTypes" :key="t.name">
+            <div x-show="t.qty>0" class="flex justify-between text-sm mb-2">
+            <span x-text="`${t.name} × ${t.qty}`"></span>
+            <span>₦<span x-text="t.qty * t.price"></span></span>
+            </div>
+        </template>
+
+        <div class="border-t border-black/20 my-4"></div>
+
+        <div class="flex justify-between text-sm">
+            <span>Service Fee (1%)</span>
+            <span>₦<span x-text="fee"></span></span>
+        </div>
+
+        <div class="flex justify-between font-bold text-lg mt-4">
+            <span>Total</span>
+            <span>₦<span x-text="total"></span></span>
+        </div>
+        </div>
+    </div>
+    </section>
+
+
+  <!-- Footer -->
+  <footer class="py-12 text-center text-blacktext-sm">
+    © 2026 PulsePass. All rights reserved.
+  </footer>
+
+
+<!-- ================= SCRIPTS ================= -->
+<!-- <script defer src="https://unpkg.com/@alpinejs/ajax@3.x.x/dist/cdn.min.js"></script> -->
+ 
+<script>
+function ticketApp() {
+  return {
+    view: 'event',
+    step: 0,
+    steps: ['Choose your Tickets', 'Contact Information', 'Checkout'],
+    cinf: ['', '', '', '', '', ''],
+    discountCode: '',
+    ticketTypes: [
+      { name: 'Basic', price: 40, qty: 0 },
+      { name: 'Premium', price: 75, qty: 0 },
+      { name: 'Twins', price: 70, qty: 0 },
+    ],
+    increase(t){ t.qty++ },
+    decrease(t){ if(t.qty>0) t.qty-- },
+    get subtotal() {
+      return this.ticketTypes.reduce((s,t)=>s+(t.qty*t.price),0)
+    },
+    get fee() {
+      return (this.subtotal * 0.01).toFixed(2)
+    },
+    get total() {
+      return (this.subtotal + Number(this.fee)).toFixed(2)
+    },
+    async proceedToPayment() {
+      const data = {
+        ticketTypes: this.ticketTypes.filter(t => t.qty > 0),
+        contactInfo: this.cinf,
+        discountCode: this.discountCode,
+        subtotal: this.subtotal,
+        fee: this.fee,
+        total: this.total
+      };
+
+        try {
+            const response = await fetch('/api/create-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+            throw new Error('Request failed');
+            }
+
+            const result = await response.json();
+
+            window.location.href = result.redirect_url;
+        } catch (error) {
+            console.error('Payment processing failed:', error);
+            alert('There was an error processing your payment. Please try again.');
+        }
+    }
+  }
+}
+</script>
+</body>
+</html>

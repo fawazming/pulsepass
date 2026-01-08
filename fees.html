@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fee Collection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Alpine JS -->
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- Smooth transitions -->
+  <style>
+    [x-cloak] { display: none !important; }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<div x-data="feeApp()" class="min-h-screen">
+  <!-- Animated Background Blobs -->
+  <div class="fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute top-20 left-10 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-blob"></div>
+    <div class="absolute top-40 right-10 w-96 h-96 bg-cyan-400/30 rounded-full blur-3xl animate-blob delay-200"></div>
+    <div class="absolute bottom-20 left-1/2 w-96 h-96 bg-pink-500/30 rounded-full blur-3xl animate-blob delay-500"></div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="top-0 z-50">
+    <nav class="mx-auto max-w-7xl px-6 py-4 backdrop-blur-lg bg-glass border border-slate/10 rounded-b-xl flex items-center justify-between">
+      <h1 class="text-xl font-bold tracking-wide">Pulse<span class="text-cyan-400">Pass</span></h1>
+      <div class="hidden md:flex gap-8 text-sm text-slate/80">
+        <a href="#features" class="hover:text-slate transition">Features</a>
+        <a href="#events" class="hover:text-slate transition">Events</a>
+        <a href="#pricing" class="hover:text-slate transition">Pricing</a>
+      </div>
+      <button class="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-medium transition">
+        Get Started
+      </button>
+    </nav>
+  </header>
+
+
+  <!-- ================= HERO SECTION ================= -->
+  <section class="relative h-[420px]">
+    <img
+      src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4"
+      class="absolute inset-0 w-full h-full object-cover"
+      alt="Institution"
+    />
+
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 h-full flex flex-col justify-end pb-10">
+      <!-- <span class="inline-block bg-indigo-600 text-white px-4 py-1 rounded-full text-sm mb-3">
+        2026 Fee Collection
+      </span> -->
+
+      <h1 class="text-3xl md:text-4xl font-bold mb-4">
+        Annual Institutional Fee Payment
+      </h1>
+
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex gap-6 text-sm">
+          <p><strong>Deadline:</strong> 30th March 2026</p>
+          <p><strong>Venue:</strong> Online Portal</p>
+        </div>
+
+        <button
+          @click="startPayment"
+          class="bg-indigo-600 hover:bg-indigo-700 transition text-white px-6 py-3 rounded-lg font-semibold shadow-lg"
+        >
+          Pay Your Fees
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTENT ================= -->
+  <main class="max-w-7xl mx-auto px-6 py-12">
+
+    <!-- ===== ABOUT SECTION ===== -->
+    <section
+      x-show="page === 'about'"
+      x-transition.opacity.duration.500ms
+      class="grid md:grid-cols-2 gap-10 items-center"
+    >
+      <div>
+        <h2 class="text-2xl font-bold mb-4">
+          About This Fee Collection
+        </h2>
+        <p class="text-gray-600 leading-relaxed mb-4">
+          This fee covers academic services, institutional development,
+          student welfare, and administrative operations for the academic year.
+        </p>
+        <p class="text-gray-600 leading-relaxed">
+          Please ensure payments are completed before the deadline to avoid
+          late penalties or access restrictions.
+        </p>
+      </div>
+
+      <div class="text-right">
+        <button
+          @click="startPayment"
+          class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 transition text-white px-10 py-5 rounded-xl text-xl font-bold shadow-xl"
+        >
+          Pay Your Fees →
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== PAYMENT SPA ===== -->
+    <section
+      x-show="page === 'payment'"
+      x-cloak
+      x-transition.opacity.duration.500ms
+    >
+
+      <!-- Step Indicator -->
+      <div class="flex items-center justify-between mb-10">
+        <template x-for="(stepName, index) in steps" :key="index">
+          <div class="flex-1 flex items-center">
+            <div
+              class="w-10 h-10 flex items-center justify-center rounded-full font-semibold transition"
+              :class="step === index
+                ? 'bg-indigo-600 text-white'
+                : 'bg-gray-200 text-gray-600'"
+            >
+              <span x-text="index + 1"></span>
+            </div>
+            <div
+              class="ml-3 text-sm font-medium"
+              x-text="stepName"
+            ></div>
+            <div
+              x-show="index < steps.length - 1"
+              class="flex-1 h-1 bg-gray-200 mx-4"
+            ></div>
+          </div>
+        </template>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-10">
+
+        <!-- LEFT / MAIN -->
+        <div class="md:col-span-2">
+
+          <!-- STEP 1: PAYMENT REFERENCE -->
+          <div x-show="step === 0" x-transition>
+            <h3 class="text-xl font-bold mb-4">Payment Reference</h3>
+            <input
+              x-model="referenceCode"
+              type="text"
+              placeholder="Enter payment reference code"
+              class="w-full border rounded-lg px-4 py-3 mb-4"
+            />
+            <button
+              @click="fetchReference"
+              class="bg-indigo-600 text-white px-6 py-3 rounded-lg"
+            >
+              Continue
+            </button>
+          </div>
+
+          <!-- STEP 2: PAYMENT COVERAGE -->
+          <div x-show="step === 1" x-transition>
+            <h3 class="text-xl font-bold mb-4">Payment Coverage</h3>
+
+            <div class="space-y-3 mb-6">
+              <template x-for="option in coverageOptions" :key="option.value">
+                <label class="flex items-center gap-3">
+                  <input
+                    type="radio"
+                    :value="option.value"
+                    x-model="coverage"
+                    class="accent-indigo-600"
+                  />
+                  <span x-text="option.label"></span>
+                </label>
+              </template>
+            </div>
+
+            <button
+              @click="step++"
+              class="bg-indigo-600 text-white px-6 py-3 rounded-lg"
+            >
+              Next
+            </button>
+          </div>
+
+          <!-- STEP 3: CONTACT INFO -->
+          <div x-show="step === 2" x-transition>
+            <h3 class="text-xl font-bold mb-4">Contact Information</h3>
+
+            <input
+              type="email"
+              placeholder="Email Address"
+              class="w-full border rounded-lg px-4 py-3 mb-4"
+            />
+            <input
+              type="tel"
+              placeholder="Phone Number (optional)"
+              class="w-full border rounded-lg px-4 py-3 mb-6"
+            />
+
+            <button
+              @click="step++"
+              class="bg-indigo-600 text-white px-6 py-3 rounded-lg"
+            >
+              Proceed to Checkout
+            </button>
+          </div>
+
+          <!-- STEP 4: CHECKOUT -->
+          <div x-show="step === 3" x-transition>
+            <h3 class="text-xl font-bold mb-4">Checkout</h3>
+
+            <div class="flex gap-3 mb-6">
+              <input
+                type="text"
+                placeholder="Discount code"
+                class="flex-1 border rounded-lg px-4 py-3"
+              />
+              <button class="border px-5 rounded-lg">
+                Apply
+              </button>
+            </div>
+
+            <button
+              class="w-full bg-green-600 hover:bg-green-700 transition text-white py-4 rounded-xl text-xl font-bold"
+            >
+              Proceed to Payment
+            </button>
+          </div>
+
+        </div>
+
+        <!-- RIGHT / ORDER SUMMARY -->
+        <aside class="bg-white rounded-xl shadow-lg p-6 h-fit">
+          <h4 class="font-bold mb-4">Order Summary</h4>
+
+          <p class="text-sm mb-2">
+            <strong>Total Fee:</strong>
+            ₦<span x-text="totalFee.toLocaleString()"></span>
+          </p>
+
+          <p class="text-sm mb-2">
+            <strong>Coverage:</strong>
+            <span x-text="coverageLabel"></span>
+          </p>
+
+          <p class="text-sm mb-2">
+            <strong>Service Fee (3%):</strong>
+            ₦<span x-text="serviceFee.toLocaleString()"></span>
+          </p>
+
+          <hr class="my-3" />
+
+          <p class="font-bold">
+            Total Payable:
+            ₦<span x-text="payableAmount.toLocaleString()"></span>
+          </p>
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+</div>
+
+  <!-- Footer -->
+  <footer class="py-12 text-center text-white/50 text-sm">
+    © 2026 PulsePass. All rights reserved.
+  </footer>
+
+
+<!-- ================= ALPINE LOGIC ================= -->
+<script>
+function feeApp() {
+  return {
+    page: 'about',
+    step: 0,
+    steps: [
+      'Reference',
+      'Coverage',
+      'Contact',
+      'Checkout'
+    ],
+
+    referenceCode: '',
+    totalFee: 0,
+    coverage: 'full',
+
+    coverageOptions: [
+      { label: 'Full Payment', value: 'full', factor: 1 },
+      { label: 'Half Payment', value: 'half', factor: 0.5 },
+      { label: 'Quarter Payment', value: 'quarter', factor: 0.25 }
+    ],
+
+    startPayment() {
+      this.page = 'payment'
+      this.step = 0
+    },
+
+    fetchReference() {
+      // Sample POST request
+      fetch('/api/payment-reference', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reference: this.referenceCode })
+      })
+
+      // Mock response
+      setTimeout(() => {
+        this.totalFee = 120000
+        this.step = 1
+      }, 800)
+    },
+
+    get coverageFactor() {
+      return this.coverageOptions.find(o => o.value === this.coverage).factor
+    },
+
+    get coverageLabel() {
+      return this.coverageOptions.find(o => o.value === this.coverage).label
+    },
+
+    get serviceFee() {
+      return Math.round(this.totalFee * this.coverageFactor * 0.03)
+    },
+
+    get payableAmount() {
+      return Math.round(this.totalFee * this.coverageFactor + this.serviceFee)
+    }
+  }
+}
+</script>
+
+</body>
+</html>
