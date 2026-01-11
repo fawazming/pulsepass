@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" x-data="summitApp()" x-init="init()" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ijebu Muslim Business Summit 2.0</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Alpine JS -->
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            glass: "rgba(255,255,255,0.15)"
+          },
+          backdropBlur: {
+            xs: '2px'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background: radial-gradient(circle at top, #0f172a, #020617);
+    }
+  </style>
+</head>
+
+<body class="text-white font-sans">
+
+<!-- NAV -->
+<header class="fixed w-full z-50 bg-glass backdrop-blur-md border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <h1 class="font-bold text-lg">IMBS 2.0</h1>
+    <nav class="hidden md:flex space-x-6 text-sm">
+      <a href="#about" class="hover:text-emerald-400">About</a>
+      <a href="#expect" class="hover:text-emerald-400">Expect</a>
+      <a href="#gallery" class="hover:text-emerald-400">Gallery</a>
+      <a href="#contact" class="hover:text-emerald-400">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="min-h-screen flex items-center justify-center text-center px-6 pt-32">
+  <div class="max-w-4xl animate__animated animate__fadeInUp">
+    <span class="uppercase tracking-widest text-emerald-400 text-xs">
+      Ijebu Muslim Business Summit 2.0
+    </span>
+    <h2 class="text-4xl md:text-6xl font-extrabold mt-4">
+      Ethics, Enterprise & <br class="hidden md:block" />
+      Economic Resilience
+    </h2>
+    <p class="mt-6 text-lg text-white/80">
+      Positioning Muslim Businesses for a Changing Economic Future
+    </p>
+
+    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="#register" class="px-8 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black font-semibold transition">
+        Register (Opening Soon)
+      </a>
+      <a href="#about" class="px-8 py-4 rounded-xl border border-white/20 hover:bg-white/10 transition">
+        Learn More
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<section class="py-16">
+  <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <template x-for="item in countdown">
+      <div class="bg-glass backdrop-blur-xl p-6 rounded-2xl border border-white/10">
+        <div class="text-3xl font-bold text-emerald-400" x-text="item.value"></div>
+        <div class="text-xs uppercase tracking-widest text-white/70" x-text="item.label"></div>
+      </div>
+    </template>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="py-24 px-6">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+    <div class="animate__animated animate__fadeInLeft">
+      <h3 class="text-3xl font-bold mb-6">About the Summit</h3>
+      <p class="text-white/80 leading-relaxed">
+        The Ijebu Muslim Business Summit (IMBS) 2.0 is a premier gathering designed to inspire, equip,
+        and connect Muslim entrepreneurs, professionals, and business leaders. Rooted in Islamic ethics
+        and forward-thinking enterprise principles, the summit provides practical insights for building
+        resilient and sustainable businesses.
+      </p>
+    </div>
+
+    <div class="bg-glass backdrop-blur-xl p-8 rounded-2xl border border-white/10 animate__animated animate__fadeInRight">
+      <p class="text-sm"><strong>Date:</strong> Saturday, 9th May 2026</p>
+      <p class="text-sm mt-2"><strong>Time:</strong> 9:00am</p>
+      <p class="text-sm mt-2"><strong>Venue:</strong> To be announced by March 2026, bi idhni Llah</p>
+    </div>
+  </div>
+</section>
+
+<!-- EXPECT -->
+<section id="expect" class="py-24 px-6 bg-white/5">
+  <div class="max-w-6xl mx-auto text-center">
+    <h3 class="text-3xl font-bold mb-12">What to Expect</h3>
+    <div class="grid md:grid-cols-4 gap-6">
+      <template x-for="item in expectations">
+        <div class="bg-glass backdrop-blur-xl p-6 rounded-2xl border border-white/10 hover:-translate-y-2 transition">
+          <p class="font-semibold text-emerald-400" x-text="item"></p>
+        </div>
+      </template>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h3 class="text-3xl font-bold text-center mb-12">Gallery</h3>
+
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <template x-for="img in gallery">
+        <div class="overflow-hidden rounded-2xl border border-white/10 bg-glass backdrop-blur-xl">
+          <img :src="img" class="w-full h-60 object-cover hover:scale-110 transition duration-500"/>
+        </div>
+      </template>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-24 px-6 bg-white/5">
+  <div class="max-w-4xl mx-auto text-center">
+    <h3 class="text-3xl font-bold mb-6">Contact</h3>
+    <p class="text-white/70">Email: <em>[Insert Email]</em></p>
+    <p class="text-white/70 mt-2">Phone: <em>[Insert Phone]</em></p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-8 text-center text-sm text-white/50">
+  © 2026 Ijebu Muslim Business Summit (IMBS). All Rights Reserved.
+</footer>
+
+<!-- ALPINE LOGIC -->
+<script>
+function summitApp() {
+  return {
+    gallery: [],
+    expectations: [
+      "Inspiring keynote and expert sessions",
+      "Practical business discussions",
+      "Networking with Muslim business leaders",
+      "Collaboration & growth opportunities"
+    ],
+    countdown: [],
+    init() {
+      this.fetchGallery();
+      this.startCountdown();
+    },
+    fetchGallery() {
+      fetch("https://galleria.sgm.ng/56789u78")
+        .then(res => res.json())
+        .then(data => this.gallery = data.images || [])
+        .catch(() => {
+          this.gallery = [
+            "https://source.unsplash.com/800x600/?conference",
+            "https://source.unsplash.com/800x600/?business",
+            "https://source.unsplash.com/800x600/?networking"
+          ];
+        });
+    },
+    startCountdown() {
+      const eventDate = new Date("2026-05-09T09:00:00").getTime();
+      setInterval(() => {
+        const now = new Date().getTime();
+        const diff = eventDate - now;
+        this.countdown = [
+          { label: "Days", value: Math.floor(diff / (1000 * 60 * 60 * 24)) },
+          { label: "Hours", value: Math.floor((diff / (1000 * 60 * 60)) % 24) },
+          { label: "Minutes", value: Math.floor((diff / (1000 * 60)) % 60) },
+          { label: "Seconds", value: Math.floor((diff / 1000) % 60) }
+        ];
+      }, 1000);
+    }
+  }
+}
+</script>
+
+</body>
+</html>

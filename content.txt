@@ -1,0 +1,4 @@
+Generate SQL & Optimize the tickets table with column id, event (JSON formatted with title, datetime, location, image), about event, ticketsType (JSON also with name, price), created_at, updated_at, deleted_at
+
+
+Generate SQL & Optimize the registrations table with column id, ticket_id, ticketType, fname, lname, email, gender, phone, amount, charges, link, status, payment (JSON formatted with data from payment gateway) created_at, updated_at, deleted_at
